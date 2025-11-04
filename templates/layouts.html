@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{{ title }} - TALENTA-MAP{% endblock %}</title>
+
+    <!-- Tailwind & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+
+        .sidebar-gradient {
+            background: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-[#0f172a] text-gray-100">
+
+    {# ====== INCLUDE BAGIAN ATAS BERDASARKAN HALAMAN ====== #}
+    {% if request.endpoint in ['dashboard', 'data_asn'] %}
+    {% include "components/sidebar.html" %}
+    <div class="lg:ml-64 min-h-screen transition-all duration-300">
+        {% include "components/header.html" %}
+        {% elif request.endpoint not in ['login'] %}
+        {% include "components/navbar.html" %}
+        {% endif %}
+
+        {# ====== BLOCK CONTENT TUNGGAL ====== #}
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        {# ====== PENUTUP WRAPPER JIKA ADA SIDEBAR ====== #}
+        {% if request.endpoint in ['dashboard', 'data_asn'] %}
+    </div>
+    {% endif %}
+
+    {% if request.endpoint != 'login' %}
+    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+    {% endif %}
+
+</body>
+
+</html>

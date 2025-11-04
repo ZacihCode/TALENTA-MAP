@@ -1,0 +1,64 @@
+{% extends "layouts.html" %}
+{% block title %}Login - TALENTA-MAP{% endblock %}
+
+{% block content %}
+<section
+    class="h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#312e81] overflow-hidden text-gray-100">
+    <div
+        class="bg-gray-900/70 backdrop-blur-xl border border-indigo-500/30 shadow-2xl rounded-2xl p-8 md:p-10 w-full max-w-md fade-in-up">
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div
+                class="mx-auto w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-[0_0_25px_rgba(99,102,241,0.6)] mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 11c0-1.104-.896-2-2-2s-2 .896-2 2 .896 2 2 2 2-.896 2-2zM12 11V5m0 6l6 6" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-white mb-2">Selamat Datang di TALENTA-MAP</h1>
+            <p class="text-gray-400">Masuk untuk mengakses peta talenta ASN berbasis AI</p>
+        </div>
+
+        <!-- Form -->
+        <form action="{{ url_for('dashboard') }}" method="get" class="space-y-6">
+            <div>
+                <label for="email" class="block text-gray-300 font-medium mb-2">Email ASN</label>
+                <input type="email" id="email" name="email" required
+                    class="w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                    placeholder="contoh@instansi.go.id">
+            </div>
+
+            <div>
+                <label for="password" class="block text-gray-300 font-medium mb-2">Kata Sandi</label>
+                <input type="password" id="password" name="password" required
+                    class="w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                    placeholder="••••••••">
+            </div>
+
+            <div class="flex items-center justify-between">
+                <label class="flex items-center text-sm text-gray-400">
+                    <input type="checkbox"
+                        class="mr-2 rounded border-gray-500 bg-gray-700 text-indigo-500 focus:ring-indigo-500">
+                    Ingat saya
+                </label>
+                <a href="#" class="text-sm text-indigo-400 hover:text-indigo-300">Lupa password?</a>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] transform hover:scale-[1.02] transition">
+                Masuk Sekarang →
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="my-8 border-t border-gray-700"></div>
+
+        <!-- Footer -->
+        <p class="text-center text-gray-400 text-sm">
+            Belum memiliki akun?
+            <a href="#" class="text-indigo-400 hover:text-indigo-300 font-medium">Hubungi Administrator</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

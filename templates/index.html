@@ -1,0 +1,181 @@
+{% extends "layouts.html" %}
+{% block title %}TALENTA-MAP - Home{% endblock %}
+
+{% block content %}
+<section class="bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#312e81] text-gray-100 pt-32 pb-20 px-4 mt-16">
+    <div class="max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="fade-in-up">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight text-white">
+                    AI-Powered Competency Mapping untuk ASN Profesional dan Adaptif
+                </h1>
+                <p class="text-xl mb-8 text-indigo-300">
+                    Transformasi manajemen talenta ASN dengan kecerdasan buatan. Objektif, transparan, dan berbasis
+                    data.
+                </p>
+                <button onclick="window.location.href='dashboard.html'"
+                    class="bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-4 rounded-lg font-bold text-lg text-white hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] transform hover:scale-105 transition">
+                    Mulai Sekarang →
+                </button>
+            </div>
+
+            <div class="hidden md:block fade-in-up">
+                <svg viewBox="0 0 500 400" class="w-full h-auto">
+                    <circle cx="250" cy="200" r="120" fill="#818cf8" opacity="0.05" />
+                    <circle cx="250" cy="200" r="90" fill="#a78bfa" opacity="0.08" />
+                    <circle cx="250" cy="200" r="60" fill="#c084fc" opacity="0.1" />
+                    <circle cx="250" cy="200" r="15" fill="#818cf8" />
+                    <circle cx="150" cy="120" r="12" fill="#fbbf24" />
+                    <circle cx="350" cy="120" r="12" fill="#10b981" />
+                    <circle cx="150" cy="280" r="12" fill="#ec4899" />
+                    <circle cx="350" cy="280" r="12" fill="#3b82f6" />
+                    <line x1="250" y1="200" x2="150" y2="120" stroke="#818cf8" stroke-width="1" opacity="0.3" />
+                    <line x1="250" y1="200" x2="350" y2="120" stroke="#818cf8" stroke-width="1" opacity="0.3" />
+                    <line x1="250" y1="200" x2="150" y2="280" stroke="#818cf8" stroke-width="1" opacity="0.3" />
+                    <line x1="250" y1="200" x2="350" y2="280" stroke="#818cf8" stroke-width="1" opacity="0.3" />
+                    <text x="245" y="210" fill="#818cf8" font-size="20" font-weight="bold">AI</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 px-4 bg-gray-900 text-gray-100">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-white mb-4">Fitur Unggulan</h2>
+            <p class="text-xl text-gray-400">Solusi komprehensif untuk manajemen talenta ASN yang lebih baik</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-gray-800 border border-indigo-500/20 rounded-2xl p-8 card-hover cursor-pointer"
+                onclick="window.location.href='rekomendasi-ai.html'">
+                <div
+                    class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Rekomendasi Jabatan</h3>
+                <p class="text-gray-400">Sistem AI merekomendasikan kandidat terbaik untuk setiap posisi dengan skor
+                    kecocokan akurat.</p>
+            </div>
+
+            <div class="bg-gray-800 border border-emerald-500/20 rounded-2xl p-8 card-hover cursor-pointer"
+                onclick="window.location.href='dashboard.html'">
+                <div
+                    class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-green-700 rounded-xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Analisis Kompetensi</h3>
+                <p class="text-gray-400">Pemetaan kompetensi real-time dengan analisis mendalam berbasis data kinerja
+                    dan pengalaman.</p>
+            </div>
+
+            <div class="bg-gray-800 border border-rose-500/20 rounded-2xl p-8 card-hover cursor-pointer"
+                onclick="window.location.href='data-asn.html'">
+                <div
+                    class="w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m0 0V4" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Peta Talenta</h3>
+                <p class="text-gray-400">Visualisasi interaktif distribusi talenta di seluruh instansi untuk pengambilan
+                    keputusan strategis.</p>
+            </div>
+
+            <div class="bg-gray-800 border border-blue-500/20 rounded-2xl p-8 card-hover cursor-pointer"
+                onclick="window.location.href='profil.html'">
+                <div
+                    class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-700 rounded-xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Career Path ASN</h3>
+                <p class="text-gray-400">Jalur karir transparan dengan rekomendasi pengembangan diri dan pelatihan
+                    personal.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900">
+    <div class="max-w-7xl mx-auto text-center">
+        <h2 class="text-4xl font-bold text-white mb-4">Dampak Nyata untuk Indonesia</h2>
+        <p class="text-xl text-indigo-200 mb-12">Transformasi birokrasi berbasis data dan AI</p>
+
+        <div class="grid md:grid-cols-4 gap-8">
+            {% for stat in [
+            {'value':'4.2','label':'Juta ASN','desc':'Cakupan Nasional'},
+            {'value':'40','label':'% Efisiensi','desc':'Proses Rotasi & Promosi'},
+            {'value':'35','label':'% Motivasi','desc':'Peningkatan ASN'},
+            {'value':'30','label':'% Akurasi','desc':'Penempatan Jabatan'}
+            ] %}
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center stat-card border border-indigo-500/20">
+                <div class="text-5xl font-bold text-white mb-3 stat-number" data-target="{{ stat.value }}">0</div>
+                <div class="text-2xl font-semibold text-white mb-2">{{ stat.label }}</div>
+                <p class="text-indigo-200">{{ stat.desc }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<script>
+    function animateCounter(element) {
+        const target = parseFloat(element.getAttribute('data-target'));
+        const duration = 2000;
+        const step = target / (duration / 16);
+        let current = 0;
+
+        const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                element.textContent = target.toString().includes('.') ? target.toFixed(1) : target;
+                clearInterval(timer);
+            } else {
+                element.textContent = current.toString().includes('.') ? current.toFixed(1) : Math.floor(current);
+            }
+        }, 16);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counters = entry.target.querySelectorAll('.stat-number');
+                counters.forEach(counter => {
+                    if (counter.textContent === '0') {
+                        animateCounter(counter);
+                    }
+                });
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const statSection = document.querySelector('.stat-card').parentElement.parentElement;
+    observer.observe(statSection);
+
+    const fadeElements = document.querySelectorAll('.fade-in-up');
+    const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    fadeElements.forEach(el => {
+        el.style.opacity = '0';
+        fadeObserver.observe(el);
+    });
+</script>
+{% include "components/footer.html" %}
+{% endblock %}

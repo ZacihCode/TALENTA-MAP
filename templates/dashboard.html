@@ -1,0 +1,109 @@
+{% extends "layouts.html" %}
+{% block title %}TALENTA-MAP - Dashboard{% endblock %}
+{% block content %}
+<main class="flex-1 pb-16 px-4">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="mb-10">
+            <h1 class="text-3xl font-bold mb-2 text-white">Dashboard Manajer SDM</h1>
+            <p class="text-indigo-300">Selamat datang di sistem manajemen talenta ASN berbasis AI.</p>
+        </div>
+
+        <!-- Statistik -->
+        <div class="grid md:grid-cols-4 gap-6 mb-10">
+            {% set stats = [
+            {'icon': 'fa-users', 'bg': 'from-indigo-500 to-purple-600', 'label': 'Total ASN Aktif', 'value': '1,247',
+            'change': '+12%', 'change_color': 'text-green-400'},
+            {'icon': 'fa-briefcase', 'bg': 'from-green-400 to-emerald-600', 'label': 'Posisi Kosong', 'value': '27',
+            'change': '-3', 'change_color': 'text-red-400'},
+            {'icon': 'fa-star', 'bg': 'from-pink-500 to-rose-600', 'label': 'Talenta Teridentifikasi', 'value': '342',
+            'change': '+8%', 'change_color': 'text-green-400'},
+            {'icon': 'fa-robot', 'bg': 'from-blue-500 to-cyan-600', 'label': 'Akurasi AI Model', 'value': '89%',
+            'change': 'Active', 'change_color': 'text-green-400'}
+            ] %}
+            {% for s in stats %}
+            <div
+                class="card-dark rounded-xl p-6 bg-slate-800/60 border border-slate-700 shadow-md hover:shadow-indigo-600/20 transition-all duration-300 hover:-translate-y-1">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br {{ s.bg }} rounded-lg flex items-center justify-center">
+                        <i class="fas {{ s.icon }} text-white text-lg"></i>
+                    </div>
+                    <span class="{{ s.change_color }} text-sm font-semibold">{{ s.change }}</span>
+                </div>
+                <h3 class="text-3xl font-bold text-white mb-1">{{ s.value }}</h3>
+                <p class="text-slate-400 text-sm">{{ s.label }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Konten Utama -->
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Kolom kiri -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-slate-800/60 rounded-xl p-6 border border-slate-700 shadow-md">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-white">Peta Talenta Instansi</h2>
+                        <button class="text-indigo-400 hover:text-indigo-300 font-medium">Lihat Detail →</button>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-indigo-200 mb-2">Pilih Jabatan Kosong:</label>
+                        <select
+                            class="w-full px-4 py-3 bg-slate-900 border border-slate-700 text-slate-100 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <option>Kepala Bidang Perencanaan</option>
+                            <option>Kepala Seksi Keuangan</option>
+                            <option>Kepala Sub Bagian Umum</option>
+                            <option>Analis Kebijakan Ahli Madya</option>
+                        </select>
+                    </div>
+
+                    <!-- Top Kandidat -->
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-4">🎯 Top 5 Kandidat Rekomendasi AI</h3>
+                        <div
+                            class="flex items-center justify-between p-4 rounded-lg bg-indigo-900/30 border border-indigo-700 hover:bg-indigo-900/50 transition-all duration-200">
+                            <div>
+                                <p class="font-bold text-white">Dr. Ahmad Hidayat</p>
+                                <p class="text-sm text-indigo-300">15 Tahun Pengalaman</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-indigo-400">95%</div>
+                                <p class="text-xs text-slate-400">Match Score</p>
+                            </div>
+                        </div>
+                        <button
+                            class="w-full mt-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-indigo-600/30 transition">
+                            Lihat Detail Analisis Kandidat
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom kanan -->
+            <div class="space-y-6">
+                <div class="bg-slate-800/60 rounded-xl p-6 border border-slate-700 shadow-md">
+                    <h3 class="text-xl font-bold text-white mb-4">Tindakan Cepat</h3>
+                    <button
+                        class="w-full flex items-center justify-center space-x-3 p-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:scale-105 transition">
+                        <i class="fas fa-plus"></i>
+                        <span>Tambah ASN Baru</span>
+                    </button>
+                    <button
+                        class="w-full mt-3 flex items-center justify-center space-x-3 p-3 bg-slate-900 text-slate-200 rounded-lg hover:bg-slate-700 transition">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Proses Rotasi</span>
+                    </button>
+                </div>
+
+                <div class="bg-slate-800/60 rounded-xl p-6 border border-slate-700 shadow-md">
+                    <h3 class="text-xl font-bold text-white mb-4">Aktivitas Terbaru</h3>
+                    <div class="space-y-3 text-sm text-indigo-100">
+                        <p>✅ Rotasi Disetujui – Ahmad Hidayat → Kepala Bidang</p>
+                        <p>📄 15 Data ASN Diperbarui</p>
+                        <p>🤖 AI Model Ditrain Ulang (+2% Akurasi)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

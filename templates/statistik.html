@@ -1,0 +1,215 @@
+{% extends "layouts.html" %}
+{% block title %}TALENTA-MAP – Statistik Nasional{% endblock %}
+{% block content %}
+<style>
+    .fade-in {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeIn .7s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    }
+
+    .card-dark {
+        background: linear-gradient(145deg, #1e1b4b 0%, #312e81 100%);
+        border: 1px solid rgba(255, 255, 255, .05);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+        transition: .3s;
+    }
+
+    .card-dark:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(99, 102, 241, .35);
+    }
+
+    .chart-container {
+        background-color: rgba(30, 27, 75, .6);
+        border: 1px solid rgba(255, 255, 255, .08);
+        border-radius: 1rem;
+        padding: 1.5rem;
+    }
+</style>
+
+<section
+    class="bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#312e81] text-slate-200 min-h-screen pt-32 pb-24 px-4 fade-in">
+    <div class="w-full space-y-16">
+        <!-- Header -->
+        <div class="text-center">
+            <h1 class="text-5xl font-bold text-white mb-4">📊 Statistik Nasional TALENTA-MAP</h1>
+            <p class="text-indigo-300 text-xl">Analisis kinerja, efisiensi, dan tren pengelolaan talenta ASN secara
+                nasional.</p>
+        </div>
+
+        <!-- Statistik Cards -->
+        <div class="grid md:grid-cols-4 gap-8 text-center">
+            <div class="card-dark">
+                <h2 id="totalASN" class="text-4xl font-bold text-indigo-300">...</h2>
+                <p class="text-slate-400 text-sm">Total ASN Terdata</p>
+            </div>
+            <div class="card-dark">
+                <h2 id="avgPotensi" class="text-4xl font-bold text-purple-300">...</h2>
+                <p class="text-slate-400 text-sm">Rata-rata Potensi Promosi</p>
+            </div>
+            <div class="card-dark">
+                <h2 id="avgKinerja" class="text-4xl font-bold text-cyan-300">...</h2>
+                <p class="text-slate-400 text-sm">Rata-rata Skor Kinerja</p>
+            </div>
+            <div class="card-dark">
+                <h2 id="avgSKP" class="text-4xl font-bold text-emerald-300">...</h2>
+                <p class="text-slate-400 text-sm">Rata-rata Nilai SKP</p>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid lg:grid-cols-2 gap-10">
+            <div class="chart-container">
+                <h2 class="text-2xl font-semibold text-white mb-4">Distribusi ASN Berdasarkan Jabatan</h2>
+                <canvas id="barChart" height="120"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="text-2xl font-semibold text-white mb-4">Tren Efisiensi & Motivasi ASN (2022–2025)</h2>
+                <canvas id="lineChart" height="120"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="text-2xl font-semibold text-white mb-4">Distribusi Berdasarkan Unit Kerja</h2>
+                <canvas id="unitChart" height="120"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="text-2xl font-semibold text-white mb-4">Profil Kompetensi Nasional</h2>
+                <canvas id="radarChart" height="120"></canvas>
+            </div>
+
+            <div class="chart-container lg:col-span-2">
+                <h2 class="text-2xl font-semibold text-white mb-4">Top 10 Jabatan dengan Potensi Promosi Tertinggi</h2>
+                <canvas id="promoChart" height="120"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="text-2xl font-semibold text-white mb-4">Proporsi Sertifikasi ASN</h2>
+                <canvas id="pieChart" height="120"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="text-2xl font-semibold text-white mb-4">Hubungan Nilai SKP vs Skor Kinerja</h2>
+                <canvas id="scatterChart" height="120"></canvas>
+            </div>
+
+            <div class="chart-container lg:col-span-2">
+                <h2 class="text-2xl font-semibold text-white mb-4">Pemetaan Kompetensi Utama ASN</h2>
+                <canvas id="doughnutChart" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    async function loadStatistik() {
+        const res = await fetch("/api/statistik");
+        const data = await res.json();
+        if (!data || data.error) { console.error("Gagal ambil data:", data.error); return; }
+
+        // Summary
+        document.getElementById("totalASN").innerText = data.summary.total_asn.toLocaleString() + " ASN";
+        document.getElementById("avgKinerja").innerText = data.summary.avg_kinerja + " Skor";
+        document.getElementById("avgPotensi").innerText = data.summary.avg_potensi + "%";
+        document.getElementById("avgSKP").innerText = data.summary.avg_skp;
+
+        // Chart 1: Bar - Jabatan
+        new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(data.jabatan_counts),
+                datasets: [{
+                    label: 'Jumlah ASN', data: Object.values(data.jabatan_counts),
+                    backgroundColor: ['#6366F1', '#8B5CF6', '#3B82F6', '#A78BFA', '#60A5FA', '#6EE7B7', '#F472B6', '#C084FC']
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: { x: { ticks: { color: '#cbd5e1' } }, y: { beginAtZero: true, ticks: { color: '#cbd5e1' } } }
+            }
+        });
+
+        // Chart 2: Line - Tren Efisiensi
+        new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: {
+                labels: data.trend.years,
+                datasets: [
+                    { label: 'Efisiensi Rotasi', data: data.trend.efisiensi, borderColor: '#6366F1', backgroundColor: 'rgba(99,102,241,0.2)', fill: true, tension: 0.3 },
+                    { label: 'Motivasi ASN', data: data.trend.motivasi, borderColor: '#9333EA', backgroundColor: 'rgba(147,51,234,0.2)', fill: true, tension: 0.3 }
+                ]
+            },
+            options: {
+                plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0' } } },
+                scales: { x: { ticks: { color: '#cbd5e1' } }, y: { beginAtZero: true, ticks: { color: '#cbd5e1' } } }
+            }
+        });
+
+        // Chart 3: Bar - Unit Kerja
+        const unitLabels = Object.keys(data.unit_counts || {}).slice(0, 10);
+        const unitValues = Object.values(data.unit_counts || {}).slice(0, 10);
+        new Chart(document.getElementById('unitChart'), {
+            type: 'bar',
+            data: { labels: unitLabels, datasets: [{ label: 'Jumlah ASN', data: unitValues, backgroundColor: '#818CF8' }] },
+            options: { plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#cbd5e1' } }, y: { beginAtZero: true, ticks: { color: '#cbd5e1' } } } }
+        });
+
+        // Chart 4: Radar Kompetensi
+        const radarLabels = ['Teknis', 'Manajerial', 'Sosial'];
+        const radarValues = [data.kompetensi_means.kompetensi_teknis, data.kompetensi_means.kompetensi_manajerial, data.kompetensi_means.kompetensi_sosial_kultural];
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: { labels: radarLabels, datasets: [{ label: 'Rata-rata Nasional', data: radarValues, backgroundColor: 'rgba(99,102,241,0.3)', borderColor: '#6366F1' }] },
+            options: { plugins: { legend: { labels: { color: '#fff' } } }, scales: { r: { angleLines: { color: '#475569' }, pointLabels: { color: '#cbd5e1' }, ticks: { display: false } } } }
+        });
+
+        // Chart 5: Horizontal Bar Top Promosi
+        const promoLabels = Object.keys(data.top_promotion || {}).slice(0, 10);
+        const promoValues = Object.values(data.top_promotion || {}).slice(0, 10);
+        new Chart(document.getElementById('promoChart'), {
+            type: 'bar',
+            data: { labels: promoLabels, datasets: [{ label: 'Potensi Promosi (%)', data: promoValues, backgroundColor: '#F472B6' }] },
+            options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#cbd5e1' } }, y: { ticks: { color: '#cbd5e1' } } } }
+        });
+
+        // Chart 6: Pie Sertifikasi
+        new Chart(document.getElementById('pieChart'), {
+            type: 'pie',
+            data: { labels: Object.keys(data.sertifikasi_counts || {}), datasets: [{ data: Object.values(data.sertifikasi_counts || {}), backgroundColor: ['#6366F1', '#9333EA', '#3B82F6', '#A78BFA', '#10B981', '#F472B6'] }] },
+            options: { plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0' } } } }
+        });
+
+        // Chart 7: Scatter - SKP vs Kinerja
+        const scatterPoints = data.scatter_points || [];
+        new Chart(document.getElementById('scatterChart'), {
+            type: 'scatter',
+            data: { datasets: [{ label: 'ASN', data: scatterPoints, borderColor: '#60A5FA', backgroundColor: 'rgba(96,165,250,0.3)' }] },
+            options: { plugins: { legend: { labels: { color: '#e2e8f0' } } }, scales: { x: { title: { display: true, text: 'Nilai SKP', color: '#cbd5e1' }, ticks: { color: '#cbd5e1' } }, y: { title: { display: true, text: 'Skor Kinerja', color: '#cbd5e1' }, ticks: { color: '#cbd5e1' } } } }
+        });
+
+        // Chart 8: Doughnut Kompetensi
+        const kompetensiLabels = Object.keys(data.kompetensi_means);
+        const kompetensiValues = Object.values(data.kompetensi_means);
+        new Chart(document.getElementById('doughnutChart'), {
+            type: 'doughnut',
+            data: { labels: kompetensiLabels, datasets: [{ data: kompetensiValues, backgroundColor: ['#6366F1', '#9333EA', '#3B82F6'] }] },
+            options: { plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0' } } } }
+        });
+    }
+    loadStatistik();
+</script>
+
+{% include "components/footer.html" %}
+{% endblock %}

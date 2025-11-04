@@ -1,0 +1,170 @@
+<!-- Mobile Sidebar Overlay -->
+<div id="sidebarOverlay"
+    class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden sidebar-overlay transition-opacity duration-300">
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar"
+    class="fixed left-0 top-0 h-full w-64 sidebar-gradient transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-30 shadow-2xl">
+
+    <div class="flex flex-col h-full">
+        <!-- Logo Section -->
+        <div class="p-6 border-b border-white border-opacity-10">
+            <div class="flex items-center group cursor-pointer">
+                <div
+                    class="relative h-14 w-14 mr-3 flex items-center justify-center rounded-xl shadow-lg bg-white p-1.5">
+                    <img src="https://cdn.aceimg.com/23a610641.png" alt="Logo Talenta Map"
+                        class="max-h-full max-w-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-white font-bold text-lg leading-tight">Talenta Map</h1>
+                    <p class="text-blue-200 text-xs">Sistem Manajemen Talenta</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <!-- Dashboard -->
+            <a href="{{ url_for('dashboard') }}" class="nav-item flex items-center px-4 py-3 rounded-xl transition-all duration-200 group
+                {% if request.endpoint == 'dashboard' %} 
+                    text-white bg-white bg-opacity-20 backdrop-blur-sm shadow-lg
+                {% else %} 
+                    text-blue-100 hover:text-white hover:bg-white hover:bg-opacity-10 hover:shadow-md
+                {% endif %}">
+                <div class="flex items-center flex-1">
+                    <svg class="w-5 h-5 mr-3 {% if request.endpoint == 'dashboard' %}text-white{% else %}text-blue-300 group-hover:text-white{% endif %}"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                        </path>
+                    </svg>
+                    <span class="font-medium">Dashboard</span>
+                </div>
+                {% if request.endpoint == 'dashboard' %}
+                <div class="w-1.5 h-8 bg-white rounded-full ml-2"></div>
+                {% endif %}
+            </a>
+
+            <!-- Data Upload -->
+            <a href="{{ url_for('data_asn') }}" class="nav-item flex items-center px-4 py-3 rounded-xl transition-all duration-200 group
+                {% if request.endpoint == 'data_asn' %} 
+                    text-white bg-white bg-opacity-20 backdrop-blur-sm shadow-lg
+                {% else %} 
+                    text-blue-100 hover:text-white hover:bg-white hover:bg-opacity-10 hover:shadow-md
+                {% endif %}">
+                <div class="flex items-center flex-1">
+                    <svg class="w-5 h-5 mr-3 {% if request.endpoint == 'data_asn' %}text-white{% else %}text-blue-300 group-hover:text-white{% endif %}"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                        </path>
+                    </svg>
+                    <span class="font-medium">Data Upload</span>
+                </div>
+                {% if request.endpoint == 'data_asn' %}
+                <div class="w-1.5 h-8 bg-white rounded-full ml-2"></div>
+                {% endif %}
+            </a>
+
+            <!-- Divider -->
+            <div class="my-4 border-t border-white border-opacity-10"></div>
+
+            <!-- Quick Stats Section -->
+            <div class="px-4 py-3 rounded-xl bg-white bg-opacity-5 backdrop-blur-sm">
+                <h3 class="text-blue-200 text-xs font-semibold uppercase tracking-wide mb-3">Quick Stats</h3>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-blue-300">Active Users</span>
+                        <span class="text-white font-bold bg-blue-500 bg-opacity-20 px-2 py-0.5 rounded-full">1</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-blue-300">Today's Analysis</span>
+                        <span class="text-white font-bold bg-green-500 bg-opacity-20 px-2 py-0.5 rounded-full">0</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-blue-300">Success Rate</span>
+                        <span
+                            class="text-white font-bold bg-purple-500 bg-opacity-20 px-2 py-0.5 rounded-full">0%</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Version Info -->
+        <div class="px-6 py-3 text-center border-t border-white border-opacity-10">
+            <p class="text-blue-300 text-xs">Version 1.0.0</p>
+            <p class="text-blue-400 text-xs mt-1">© 2025 Talenta Map</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom scrollbar for sidebar */
+    #sidebar nav::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #sidebar nav::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+
+    #sidebar nav::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+    }
+
+    #sidebar nav::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Nav item animation */
+    .nav-item {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nav-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s;
+    }
+
+    .nav-item:hover::before {
+        left: 100%;
+    }
+</style>
+
+<script>
+    // Close sidebar on mobile when clicking a nav link
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function () {
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+        });
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', function () {
+        if (window.innerWidth >= 1024) {
+            sidebar.classList.remove('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+    });
+
+    // Add active state animation
+    document.addEventListener('DOMContentLoaded', function () {
+        const activeLink = document.querySelector('.nav-item.text-white');
+        if (activeLink) {
+            activeLink.style.animation = 'pulse 2s ease-in-out infinite';
+        }
+    });
+</script>

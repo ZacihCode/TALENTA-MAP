@@ -1,0 +1,238 @@
+{% extends "layouts.html" %}
+{% block title %}TALENTA-MAP - Rekomendasi AI{% endblock %}
+{% block content %}
+
+<style>
+    .fade-in {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeIn 0.7s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .pagination-btn {
+        padding: 6px 12px;
+        border-radius: 6px;
+        background-color: #1e293b;
+        color: #cbd5e1;
+        font-size: 0.9rem;
+        transition: 0.2s;
+    }
+
+    .pagination-btn:hover {
+        background-color: #334155;
+        color: white;
+    }
+
+    .pagination-btn.active {
+        background-color: #6366f1;
+        color: white;
+    }
+</style>
+
+<main class="flex-1 pt-24 pb-16 px-0 fade-in bg-[#0f172a] text-slate-200 min-h-screen">
+    <div class="w-full space-y-10 px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center">
+            <h1 class="text-4xl font-bold text-white mb-2">Rekomendasi AI</h1>
+            <p class="text-indigo-300">Analisis kecocokan jabatan dan pengembangan karir ASN berbasis AI</p>
+        </div>
+
+        <!-- Dropdown Filter -->
+        <section class="bg-slate-800/60 rounded-xl shadow-md border border-slate-700 p-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <label for="jabatanSelect" class="block text-sm font-semibold text-indigo-300 mb-2">
+                        Pilih Jabatan Tujuan:
+                    </label>
+                    <select id="jabatanSelect"
+                        class="w-full md:w-80 px-4 py-3 rounded-lg bg-slate-900 text-white border border-slate-600 focus:ring-2 focus:ring-indigo-500 transition">
+                        <option>Semua Data</option>
+                        {% for j in jabatan_options %}
+                        <option>{{ j }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="perPage" class="block text-sm font-semibold text-indigo-300 mb-2">
+                        Tampilkan per halaman:
+                    </label>
+                    <select id="perPage"
+                        class="w-full md:w-40 px-4 py-3 rounded-lg bg-slate-900 text-white border border-slate-600 focus:ring-2 focus:ring-indigo-500 transition">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabel Data -->
+        <section class="bg-slate-800/60 rounded-xl shadow-md border border-slate-700 p-6">
+            <h2 class="text-2xl font-semibold text-white mb-4">Hasil Rekomendasi AI</h2>
+            <div class="overflow-x-auto">
+                <table id="asnTable" class="w-full border-collapse text-sm">
+                    <thead class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-semibold">Nama</th>
+                            <th class="py-3 px-4 text-left font-semibold">Unit Kerja</th>
+                            <th class="py-3 px-4 text-left font-semibold">Jabatan Saat Ini</th>
+                            <th class="py-3 px-4 text-left font-semibold">Jabatan Tujuan</th>
+                            <th class="py-3 px-4 text-left font-semibold">Nilai SKP</th>
+                            <th class="py-3 px-4 text-left font-semibold">Skor Kinerja</th>
+                            <th class="py-3 px-4 text-left font-semibold">Potensi Promosi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="asnBody" class="divide-y divide-slate-700">
+                        <tr>
+                            <td colspan="7" class="text-center py-4 text-slate-400">🔄 Memuat data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div id="pagination" class="flex flex-wrap justify-center items-center mt-6 gap-2 text-sm"></div>
+        </section>
+
+        <!-- Radar Chart -->
+        <section class="bg-slate-800/60 rounded-xl border border-slate-700 shadow-md p-6">
+            <h2 class="text-2xl font-semibold text-white mb-4">Analisis Kompetensi & Skor AI</h2>
+            <canvas id="aiChart" height="120"></canvas>
+        </section>
+    </div>
+</main>
+
+<script>
+    let radarChart;
+    let allData = [];
+    let currentPage = 1;
+
+    function renderTable(data, page = 1, perPage = 20) {
+        const tbody = document.getElementById("asnBody");
+        const start = (page - 1) * perPage;
+        const paginatedData = data.slice(start, start + perPage);
+
+        tbody.innerHTML = paginatedData.map(k => `
+            <tr class="hover:bg-slate-700/40 transition">
+                <td class="py-3 px-4 font-medium text-white">${k.nama}</td>
+                <td class="py-3 px-4 text-slate-300">${k.unit_kerja}</td>
+                <td class="py-3 px-4 text-slate-300">${k.jabatan_saat_ini}</td>
+                <td class="py-3 px-4 text-slate-300">${k.jabatan_tujuan}</td>
+                <td class="py-3 px-4 text-indigo-300 font-semibold">${k.nilai_skp.toFixed(2)}</td>
+                <td class="py-3 px-4 text-green-400 font-semibold">${k.skor_kinerja.toFixed(2)}</td>
+                <td class="py-3 px-4 text-yellow-400 font-semibold">${(k.potensi_promosi * 100).toFixed(1)}%</td>
+            </tr>
+        `).join('');
+
+        renderPagination(data.length, page, perPage);
+    }
+
+    function renderPagination(total, page, perPage) {
+        const pagination = document.getElementById("pagination");
+        const totalPages = Math.ceil(total / perPage);
+        if (totalPages <= 1) {
+            pagination.innerHTML = "";
+            return;
+        }
+
+        let buttons = `
+            <button class="pagination-btn" ${page === 1 ? "disabled" : ""} onclick="changePage(1)">«</button>
+            <button class="pagination-btn" ${page === 1 ? "disabled" : ""} onclick="changePage(${page - 1})">‹</button>
+        `;
+
+        const start = Math.max(1, page - 2);
+        const end = Math.min(totalPages, page + 2);
+        for (let i = start; i <= end; i++) {
+            buttons += `<button class="pagination-btn ${i === page ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+        }
+
+        buttons += `
+            <button class="pagination-btn" ${page === totalPages ? "disabled" : ""} onclick="changePage(${page + 1})">›</button>
+            <button class="pagination-btn" ${page === totalPages ? "disabled" : ""} onclick="changePage(${totalPages})">»</button>
+        `;
+        pagination.innerHTML = buttons;
+    }
+
+    function changePage(newPage) {
+        const perPage = parseInt(document.getElementById("perPage").value);
+        currentPage = newPage;
+        renderTable(allData, currentPage, perPage);
+    }
+
+    async function loadData(jabatan = "Semua Data") {
+        const tbody = document.getElementById("asnBody");
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-slate-400">🔄 Memuat data...</td></tr>`;
+
+        const res = await fetch(`/api/rekomendasi-data?jabatan=${encodeURIComponent(jabatan)}`);
+        const data = await res.json();
+
+        if (!data || data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-slate-400">⚠️ Tidak ada data untuk jabatan tersebut.</td></tr>`;
+            document.getElementById("pagination").innerHTML = "";
+            updateChart([]);
+            return;
+        }
+
+        allData = data;
+        currentPage = 1;
+        const perPage = parseInt(document.getElementById("perPage").value);
+        renderTable(allData, currentPage, perPage);
+        loadChart(jabatan);
+    }
+
+    async function loadChart(jabatan = "Semua Data") {
+        const res = await fetch(`/api/rekomendasi-chart?jabatan=${encodeURIComponent(jabatan)}`);
+        const chartData = await res.json();
+        updateChart(chartData);
+    }
+
+    function updateChart(chartData) {
+        const ctx = document.getElementById('aiChart').getContext('2d');
+        if (radarChart) radarChart.destroy();
+
+        if (!chartData || chartData.length === 0) {
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: { labels: [], datasets: [] },
+                options: { plugins: { legend: { display: false } } }
+            });
+            return;
+        }
+
+        radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Teknis', 'Manajerial', 'Sosial', 'Nilai SKP', 'Kinerja', 'Potensi Promosi'],
+                datasets: chartData.map(d => ({
+                    label: d.label,
+                    data: d.data,
+                    backgroundColor: d.color + '33',
+                    borderColor: d.color,
+                    borderWidth: 2
+                }))
+            },
+            options: {
+                scales: { r: { beginAtZero: true, ticks: { display: false } } },
+                plugins: { legend: { position: 'bottom', labels: { color: 'white' } } }
+            }
+        });
+    }
+
+    document.getElementById("jabatanSelect").addEventListener("change", e => loadData(e.target.value));
+    document.getElementById("perPage").addEventListener("change", () => {
+        renderTable(allData, currentPage, parseInt(document.getElementById("perPage").value));
+    });
+
+    // Load default
+    loadData();
+</script>
+{% include "components/footer.html" %}
+{% endblock %}
